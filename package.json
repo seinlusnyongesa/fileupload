@@ -1,0 +1,16 @@
+{
+  "name": "fileupload",
+  "version": "1.0.0",
+  "description": "this a practice project on file uploads using multer",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index"
+  },
+  "keywords": [],
+  "author": "seinlus nyongesa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "multer": "^1.4.4"
+  }
+}
