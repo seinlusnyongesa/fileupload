@@ -1,22 +1,38 @@
 const express = require("express");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString().slice(0, 13) + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "application/pdf") {
+    cb(null, true);
+  } else {
+    console.log("we can't accept such files");
+    cb(null, false);
+  }
+};
+const upload = multer({ storage: storage, fileFilter });
 const fs = require("fs");
 const path = require("path");
 
 const app = express();
-app.use(express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
-app.post("/", upload.single("letter"), (req, res, next) => {
-  console.log(req.file.path);
-
+app.post("/", upload.single("letter"), (req, res) => {
   return res.send("this is it");
 });
 
 // app.get("/", async (req, res) => {
 //   fs.readFile(
-//     "uploads/e021c12bf651e44c882c014c5b6b86ae",
-//     { encoding: "utf-8" },
+//     "uploads/2022-02-04T19attachment_letter.pdf",
+//     { encoding: "utf8" },
 //     (err, data) => {
 //       if (err) {
 //         console.error(err);
